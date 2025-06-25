@@ -186,6 +186,14 @@ class Permission(Flag):
     """Allows sending polls"""
     USE_EXTERNAL_APPS = 1 << 50
     """Allows user-installed apps to send public responses. When disabled, users will still be allowed to use their apps but the responses will be ephemeral. This only applies to apps not also installed to the server."""
+    UNKNOWN_51 = 1 << 51
+    """Unknown future permission"""
+    UNKNOWN_52 = 1 << 52
+    """Unknown future permission"""
+    UNKNOWN_53 = 1 << 53
+    """Unknown future permission"""
+    UNKNOWN_54 = 1 << 54
+    """Unknown future permission"""
 
     def with_overwrite(self, allow: int, deny: int) -> Permission:
         return (self & ~deny) | allow
