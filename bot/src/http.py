@@ -221,7 +221,7 @@ async def request(
 
     response: ClientResponse | None = None
 
-    for tries in range(5):
+    for tries in range(10):
         for f in files or []:
             f.reset(seek=tries)
 
