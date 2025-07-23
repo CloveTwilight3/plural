@@ -49,7 +49,7 @@ MENTION_PATTERN = compile(
     r'<(?:'  # ? handles when proxy tags are <text> and ensures mentions are preserved
     r'(?:[@#/][!&]?\d+)|'        # ? users, channels, roles
     r'(?:/(?:\w+ ?){1,3}:)\d+|'  # ? slash commands
-    r'(?:a?:\S+:\d+)|'           # ? custom emoji
+    r'(?:a?:[^:]+:\d+)|'         # ? custom emoji
     r'(?:t:\d+:[tTdDfFR])|'      # ? timestamps
     r'(?:id:customize)|'         # ? guild navigation
     r'(?:sound:\d+)|'            # ? soundmoji (might be deprecated)
@@ -270,26 +270,33 @@ def check_member(
         ):
             continue
 
-        # ? ensure mentions are preserved
-        for safety_match in MENTION_PATTERN.finditer(check.string):
+        mentions = len(MENTION_PATTERN.findall(check.string))
+
+        if mentions:
+            proxied_mentions = len(MENTION_PATTERN.findall(check.group(2)))
             if (
-                (check.end(1) and safety_match.start() < check.end(1)) or
-                ((check.start(3)-len(check.string)) and
-                    safety_match.end() > check.start(3)
-                 )
+                mentions != proxied_mentions and
+                mentions != sum((
+                    proxied_mentions,
+                    len(MENTION_PATTERN.findall(proxy_tag.prefix)),
+                    len(MENTION_PATTERN.findall(proxy_tag.suffix))
+                ))
             ):
-                break
-        else:
-            return CheckMemberResult(
-                content=check.group(2),
-                proxy_tag=index,
-                reason=''.join([
-                    'Matched proxy tag ',
-                    f'`{proxy_tag.prefix}`' if proxy_tag.prefix else '',
-                    '​`text`​',  # ? zero width spaces to separate markdown
-                    f'`{proxy_tag.suffix}`' if proxy_tag.suffix else '',
-                ])
-            )
+                debug_log.append(
+                    f'Proxy tag {proxy_tag.name} '
+                    'Failed to preserve all mentions.')
+                continue
+
+        return CheckMemberResult(
+            content=check.group(2),
+            proxy_tag=index,
+            reason=''.join([
+                'Matched proxy tag ',
+                f'`{proxy_tag.prefix}`' if proxy_tag.prefix else '',
+                '​`text`​',  # ? zero width spaces to separate markdown
+                f'`{proxy_tag.suffix}`' if proxy_tag.suffix else '',
+            ])
+        )
 
     return None
 
@@ -806,7 +813,7 @@ async def insert_emojis(
             return content
 
     for emoji, exists in zip(unsharded_used, redis_response, strict=True):
-        if exists:
+        if exists or emoji.id not in app_emojis:
             continue
 
         content = content.replace(
