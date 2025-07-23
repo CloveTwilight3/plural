@@ -409,15 +409,28 @@ async def slash_api(
             description='Set expiry time (format: 1d2h3m4s); Default is None (never expires)',
             required=False)],
     contexts=[InteractionContextType.GUILD],
-    integration_types=[ApplicationIntegrationType.GUILD_INSTALL])
+    integration_types=ApplicationIntegrationType.ALL())
 async def slash_autoproxy(
     interaction: Interaction,
     enable: bool | None = None,
     member: ProxyMember | None = None,
     global_: bool = False,
     mode: str | None = None,
-    expiry: str | None = None
+    expiry: str | None = None,
+    skip_integration_check: bool = False
 ) -> None:
+    if (
+        not skip_integration_check and
+        interaction.authorizing_integration_owners.get(
+            ApplicationIntegrationType.GUILD_INSTALL
+        ) is None
+    ):
+        raise InteractionError(
+            '/plu/ral has not been invited to this server!\n\n'
+            '[Invite /plu/ral](https://discord.com/oauth2'
+            '/authorize?client_id=1291501048493768784)'
+        )
+
     match (mode.lower() if mode else None):
         case 'front':
             mode = AutoproxyMode.FRONT
@@ -474,7 +487,7 @@ async def slash_autoproxy(
 
         if not global_:
             embed.set_author(
-                name=interaction.guild.name,
+                name=interaction.guild.name or 'Unknown Server',
                 icon_url=interaction.guild.icon_url or MISSING
             )
 
@@ -524,7 +537,7 @@ async def slash_autoproxy(
 
     if not global_:
         embed.set_author(
-            name=interaction.guild.name,
+            name=interaction.guild.name or 'Unknown Server',
             icon_url=interaction.guild.icon_url or MISSING
         )
 
@@ -1190,7 +1203,8 @@ async def slash_switch(
         member=member if enable else None,
         global_=True,
         mode=mode,
-        expiry=expiry
+        expiry=expiry,
+        skip_integration_check=True
     )
 
 
