@@ -191,11 +191,6 @@ async def slash_member_list(
             type=ApplicationCommandOptionType.STRING,
             name='color',
             description='Color for the member (hex)',
-            required=False),
-        ApplicationCommand.Option(
-            type=ApplicationCommandOptionType.STRING,
-            name='simply_plural_id',
-            description='Simply Plural ID to link to the member',
             required=False)],
     contexts=InteractionContextType.ALL(),
     integration_types=ApplicationIntegrationType.ALL())
@@ -209,8 +204,7 @@ async def slash_member_new(
     pronouns: str | None = None,
     birthday: str | None = None,
     color: str | None = None,
-    group: Group | None = None,
-    simply_plural_id: str | None = None
+    group: Group | None = None
 ) -> None:
     usergroup = await interaction.get_usergroup()
 
@@ -249,8 +243,7 @@ async def slash_member_new(
         custom_id=custom_id,
         pronouns=pronouns or '',
         birthday=birthday or '',
-        color=int_color,
-        simply_plural_id=simply_plural_id,
+        color=int_color
     )
 
     if tag_prefix or tag_suffix:
@@ -283,16 +276,6 @@ async def slash_member_new(
             color=member.color or 0x69ff69
         )])
     )
-
-    if simply_plural_id:
-        await interaction.followup.send(
-            embeds=[Embed.warning(
-                title='Simply Plural Note',
-                message='Simply Plural Integration is not yet implemented'
-            ).set_footer(
-                text='The ID you set has still been saved to the member'
-            )]
-        )
 
 
 @member.command(
