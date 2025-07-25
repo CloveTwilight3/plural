@@ -45,6 +45,7 @@ async def on_interaction(interaction: Interaction, latency: int) -> None:
             return await on_autocomplete(interaction)
         except Exception as e:  # noqa: BLE001
             await on_interaction_error(interaction, e)
+            return
 
     with span(
         'uninitialized interaction',
