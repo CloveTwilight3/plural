@@ -155,7 +155,7 @@ async def slash_member_list(
         ApplicationCommand.Option(
             type=ApplicationCommandOptionType.ATTACHMENT,
             name='avatar',
-            description='Avatar for the member (max 4MB)',
+            description='Avatar for the member (max 8MB)',
             required=False),
         ApplicationCommand.Option(
             type=ApplicationCommandOptionType.STRING,
@@ -328,7 +328,7 @@ async def slash_member_remove(
         ApplicationCommand.Option(
             type=ApplicationCommandOptionType.ATTACHMENT,
             name='avatar',
-            description='New member avatar (4MB max)',
+            description='New member avatar (8MB max)',
             required=False)],
     contexts=InteractionContextType.ALL(),
     integration_types=ApplicationIntegrationType.ALL())
@@ -802,7 +802,7 @@ async def slash_member_set_pronouns(
         ApplicationCommand.Option(
             type=ApplicationCommandOptionType.ATTACHMENT,
             name='avatar',
-            description='Avatar for the proxy tag (4MB max)',
+            description='Avatar for the proxy tag (8MB max)',
             required=False)],
     contexts=InteractionContextType.ALL(),
     integration_types=ApplicationIntegrationType.ALL())
@@ -881,7 +881,7 @@ async def slash_member_tags_add(
         ApplicationCommand.Option(
             type=ApplicationCommandOptionType.ATTACHMENT,
             name='avatar',
-            description='Avatar for the proxy tag (4MB max) (leave empty to remove)',
+            description='Avatar for the proxy tag (8MB max) (leave empty to remove)',
             required=False)],
     contexts=InteractionContextType.ALL(),
     integration_types=ApplicationIntegrationType.ALL())

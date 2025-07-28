@@ -115,13 +115,9 @@ def _convert_avatar(
         Q=80,
         lossless=False,
         target_size=256_000,
-        passes=3,
+        passes=4,
         smart_deblock=True
     )
-
-    if len(image_data) > avatar.size and avatar.webp:
-        # ? if the converted image is larger than the original and already webp, keep the original
-        return avatar
 
     return Avatar(
         url=avatar.url,

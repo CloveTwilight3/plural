@@ -119,7 +119,7 @@ async function handlePut(cdnRequest: CDNRequest): Promise<Response> {
 
     const contentLength = parseInt(cdnRequest.request.headers.get('Content-Length') || '0')
 
-    const MAX_SIZE = 4_194_304 // 4MB in bytes
+    const MAX_SIZE = 16_777_216 // 16MB in bytes
 
     if (contentLength > MAX_SIZE) {
         return jsonError('Payload Too Large', 413)
@@ -186,8 +186,8 @@ async function handleDelete(cdnRequest: CDNRequest): Promise<Response> {
         `https://api.cloudflare.com/client/v4/zones/${cdnRequest.env.CLOUDFLARE_ZONE_ID}/purge_cache`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${cdnRequest.env.CLOUDFLARE_API_TOKEN}`,
-          "Content-Type": "application/json"
+            "Authorization": `Bearer ${cdnRequest.env.CLOUDFLARE_API_TOKEN}`,
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({ "files": [cdnRequest.request.url] })
     })
@@ -317,7 +317,8 @@ async function createSignedRequest(
                 `SignedHeaders=${signedHeaders},`,
                 `Signature=${signature}`
             ].join(''),
-            'Content-Type': 'image/webp'}),
+            'Content-Type': 'image/webp'
+        }),
         body: body || undefined
     }
 }
@@ -338,35 +339,43 @@ function jsonError(message: string, status: number): Response {
 async function has_access(cdnRequest: CDNRequest): Promise<boolean> {
     return (await fetch(
         `${cdnRequest.env.API_URL}/__redis/SISMEMBER/avatar:${cdnRequest.fileHash}/${cdnRequest.userId}`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`}}
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`
+        }
+    }
     )).status === 200
 }
 
 async function add_access(cdnRequest: CDNRequest): Promise<boolean> {
     return (await fetch(
         `${cdnRequest.env.API_URL}/__redis/SADD/avatar:${cdnRequest.fileHash}/${cdnRequest.userId}`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`}}
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`
+        }
+    }
     )).ok
 }
 
 async function remove_access(cdnRequest: CDNRequest): Promise<boolean> {
     return (await fetch(
         `${cdnRequest.env.API_URL}/__redis/SREM/avatar:${cdnRequest.fileHash}/${cdnRequest.userId}`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`}}
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`
+        }
+    }
     )).ok
 }
 
 async function has_members(cdnRequest: CDNRequest): Promise<boolean> {
     return (await fetch(
         `${cdnRequest.env.API_URL}/__redis/SCARD/avatar:${cdnRequest.fileHash}/None`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`}}
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${cdnRequest.env.UPLOAD_TOKEN}`
+        }
+    }
     )).status === 200
 }
