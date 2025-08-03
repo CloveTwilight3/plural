@@ -272,7 +272,7 @@ async def userproxy_sync(
 async def _delete_userproxy(
     userproxy: ProxyMember
 ) -> None:
-    responses = await gather(
+    _responses = await gather(
         request(Route(
             'PUT',
             '/applications/{application_id}/commands',
@@ -293,9 +293,7 @@ async def _delete_userproxy(
         return_exceptions=True
     )
 
-    for response in responses:
-        if isinstance(response, Exception):
-            raise response
+    # ? if requests fail, continue anyway
 
     userproxy.userproxy = None
 
