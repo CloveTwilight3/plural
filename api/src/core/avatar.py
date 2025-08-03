@@ -231,10 +231,13 @@ async def delete_avatar(
                 tries + 1
             )
 
-        if response.status != 204:
-            raise PluralException(
-                f'failed to delete avatar: {await response.text()}'
-            )
+        match response.status:
+            case 204 | 404:
+                return None
+            case _:
+                raise PluralException(
+                    f'failed to delete avatar: {await response.text()}'
+                )
 
     return None
 
