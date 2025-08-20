@@ -618,7 +618,7 @@ async def get_webhook(
 
     webhook_index = channel.data.get('__plural_last_webhook', 0)
 
-    if channel.data.get('type') in {11, 12}:
+    if channel.data.get('type') in {10, 11, 12}:
         channel = await Cache.get(
             f'discord:channel:{channel.data['parent_id']}'
         )
@@ -1594,7 +1594,7 @@ async def webhook_handler(
         'wait': 'true'
     }
 
-    if channel.data.get('type') in {11, 12}:
+    if channel.data.get('type') in {10, 11, 12}:
         params['thread_id'] = event['channel_id']
 
     return ProxyResponse(

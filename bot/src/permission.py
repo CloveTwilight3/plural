@@ -171,7 +171,7 @@ class Permission(Flag):
         if permissions & cls.ADMINISTRATOR:
             return cls.all()
 
-        if channel.data.get('type') in {11, 12}:
+        if channel.data.get('type') in {10, 11, 12}:
             channel = await Cache.get(
                 f'discord:channel:{channel.data.get("parent_id")}'
             )

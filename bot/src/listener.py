@@ -145,7 +145,7 @@ async def on_reaction_add(event: dict, start_time: int) -> None:
                         message_id=event['message_id']),
                     params=(
                         {'thread_id': event['channel_id']}
-                        if channel.data.get('type') in {11, 12}
+                        if channel.data.get('type') in {10, 11, 12}
                         else None))
             except Forbidden:
                 await _send_error_message(event['channel_id'], event['id'])
