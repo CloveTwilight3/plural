@@ -598,8 +598,6 @@ class SystemChannelFlag(Flag):
     """Suppress role subscription purchase and renewal notifications"""
     SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATION_REPLIES = 1 << 5
     """Hide role subscription sticker reply buttons"""
-    SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATION_REPLIES = 1 << 6
-    """Hide role subscription sticker reply buttons"""
     SUPPRESS_CHANNEL_PROMPT_DEADCHAT = 1 << 7
     """Suppress dead chat channel prompts"""
 
