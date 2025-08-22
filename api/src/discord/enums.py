@@ -600,6 +600,8 @@ class SystemChannelFlag(Flag):
     """Hide role subscription sticker reply buttons"""
     SUPPRESS_CHANNEL_PROMPT_DEADCHAT = 1 << 7
     """Suppress dead chat channel prompts"""
+    UNDOCUMENTED_GARBAGE = 1 << 8
+    """Unknown"""
 
 
 class VerificationLevel(Enum):
