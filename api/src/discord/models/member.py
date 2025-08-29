@@ -46,7 +46,7 @@ class Member(RawBaseModel):
     """guild member flags represented as a bit set (MemberFlag object), defaults to `0`"""
     pending: Optional[bool]
     """whether the user has not yet passed the guild's Membership Screening requirements"""
-    permissions: Permission
+    permissions: Optional[Permission]
     """total permissions of the member in the channel, including overwrites, returned when in the interaction object"""
     communication_disabled_until: Optional[Nullable[datetime]]
     """when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out"""
