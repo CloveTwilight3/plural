@@ -957,6 +957,11 @@ def format_reply(
 
             return proxy_content
         case ReplyFormat.EMBED:
+            if INLINE_REPLY_PATTERN.match(content):
+                content = '\n'.join(
+                    content.split('\n')[1:]
+                )
+
             content = (
                 content
                 if len(content) <= 75 else
