@@ -109,6 +109,11 @@ class Permission(Flag):
     """Allows sending polls"""
     USE_EXTERNAL_APPS = 1 << 50
     """Allows user-installed apps to send public responses. When disabled, users will still be allowed to use their apps but the responses will be ephemeral. This only applies to apps not also installed to the server."""
+    PERMISSION_51 = 1 << 51
+    PERMISSION_52 = 1 << 52
+    PERMISSION_53 = 1 << 53
+    PERMISSION_54 = 1 << 54
+
 
     @classmethod
     def all(cls) -> Self:
