@@ -393,6 +393,10 @@ async def _application(
     )
 
     if token is not None:
+        # ? the worse possible way to do this, but this
+        # ? is v3 so i don't have the attention span
+        token = token.replace('*', '\\*').replace('_', '\\_')
+
         embed.add_field(
             name='API Token',
             value=f'This will only be shown once.\n||{token}||',
