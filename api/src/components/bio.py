@@ -91,7 +91,10 @@ async def _bio(
 
     await interaction.response.send_modal(
         modal_proxy.with_overrides(
-            title=f'Set {member.name}\'s bio',
+            title=(
+                f'Set {member.name}\'s bio'
+                if len(member.name) <= 35 else
+                f'Set {member.name[:32]}...\'s bio'),
             text_inputs=[TextInput(
                 custom_id='bio',
                 style=TextInputStyle.PARAGRAPH,
